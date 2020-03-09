@@ -1,0 +1,14 @@
+setup:
+    addons:
+        - plan: heroku-postgresql
+build:
+    docker:
+        web: Dockerfile
+
+release:
+    image: web
+    command:
+        - flask run --host=0.0.0.0
+        
+run:
+    web: flask run --host=0.0.0.0
