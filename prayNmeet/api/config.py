@@ -1,7 +1,13 @@
 import os
-basedir = os.path.abspath(os.path.dirname(__file__))
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
-class Config(object):
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite://")
-    SQLACHEMY_TRACK_MODIFICATIONS = False
+class Config:
+    @classmethod
+    def configuration(cls):
+        return {
+            'SQLALCHEMY_DATABASE_URI':os.getenv("DATABASE_URL"),
+            'SQLACHEMY_TRACK_MODIFICATIONS':False
+        }
+

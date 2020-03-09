@@ -1,23 +1,37 @@
-from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
+import os
+from flask import Flask, jsonify, make_response
+from flask_restful import Resource, Api
+from flask_jwt_extended import (
+    JWTManager, jwt_required, 
+    create_access_token, get_jwt_identity
+)
+
+from .config import db
+from .config import Config 
+from .routes import initialize_routes
 
 
-app = Flask(__name__)
-app.config.from_object("api.config.Config")
-db = SQLAlchemy(app)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_mapping(Config.configuration())
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or os.urandom(24)
 
-class User(db.Model):
-    __tablename__ = "users"
+    # app.config['JWT_SECRET_KEY'] = 'jwtsecretekey'
+    jwt = JWTManager(app)
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(128), nullable=True)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+    api = Api(app)
+    db.init_app(app)
 
-    def __init__(self, username):
-        self.username = username
+    
+    initialize_routes(api)
 
+    @app.before_first_request
+    def create_tables():
+        db.create_all()
+    
+    @app.errorhandler(404)
+    def not_found(error):
+        return make_response(jsonify({'error': 'Not found'}), 404)
+    
 
-@app.route("/")
-def hello_world():
-    return jsonify(hello="world")
+    return app

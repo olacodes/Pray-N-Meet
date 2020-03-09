@@ -17,6 +17,3 @@ WORKDIR /app
 
 # copy project to working directory
 COPY . .
-
-# run entrypoint.sh
-ENTRYPOINT ["/app/entrypoint.sh"]
