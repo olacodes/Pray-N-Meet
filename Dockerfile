@@ -16,4 +16,4 @@ RUN mkdir /app
 WORKDIR /app
 
 # copy project to working directory
-COPY . .
+COPY prayNmeet .

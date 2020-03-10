@@ -8,7 +8,7 @@ build:
 release:
     image: web
     command:
-        - flask run --host=0.0.0.0
+        - flask run
         
 run:
-    web: flask run --host=0.0.0.0
+    web: flask run --host 0.0.0.0$port

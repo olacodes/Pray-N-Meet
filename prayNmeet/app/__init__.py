@@ -28,6 +28,11 @@ def create_app():
     @app.before_first_request
     def create_tables():
         db.create_all()
+
+    @app.route('/')
+    def root():
+        return jsonify({'message': 'Welcome to prayNmeet api endpoints'})
+
     
     @app.errorhandler(404)
     def not_found(error):
