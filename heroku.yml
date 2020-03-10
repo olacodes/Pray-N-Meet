@@ -8,7 +8,4 @@ build:
 release:
     image: web
     command:
-        - flask run
-        
-run:
-    web: flask run --host 0.0.0.0$port
+        - gunicorn --bind 0.0.0.0:5000 app:app

@@ -6,9 +6,12 @@ from flask_jwt_extended import (
     create_access_token, get_jwt_identity
 )
 
+# load_dotenv(".env")
+
 from .config import db
 from .config import Config 
 from .routes import initialize_routes
+from .oa import oauth
 
 
 def create_app():
@@ -24,6 +27,7 @@ def create_app():
 
     
     initialize_routes(api)
+    oauth.init_ap(app)
 
     @app.before_first_request
     def create_tables():
